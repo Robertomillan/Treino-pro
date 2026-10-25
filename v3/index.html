@@ -1,0 +1,441 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a101c"><title>Treino Pro 3.0</title>
+<style>
+:root{--bg:#090e18;--panel:#141e2d;--panel2:#1b293c;--line:#2a3a50;--txt:#edf3fb;--muted:#9cacbf;--accent:#3b82f6;--font:15px;--gap:12px}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:var(--font)/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom))}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.shell{max-width:900px;margin:auto;padding:18px 16px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{font-size:21px;font-weight:850;letter-spacing:-.6px}.brand span{color:var(--accent)}.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:12px;padding:10px 14px}.eyebrow{color:var(--muted);font-size:.78em;text-transform:uppercase;letter-spacing:1px}h1{font-size:1.55em;line-height:1.2;margin:15px 0 7px}h2{font-size:1.15em;margin:20px 0 12px}p{margin:5px 0 12px;color:var(--muted)}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin:var(--gap) 0}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stats .card{margin:0}.num{font-size:2em;font-weight:800}.muted{color:var(--muted);font-size:.86em}.accent{color:var(--accent)}.primary{background:var(--accent);color:white;border:0;border-radius:12px;padding:12px 16px;font-weight:750}.secondary{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:10px 13px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.progress{height:7px;background:var(--line);border-radius:20px;overflow:hidden;margin:12px 0}.progress>div{height:100%;background:var(--accent)}.tabs{display:flex;gap:8px;overflow-x:auto;padding:5px 0 10px;scrollbar-width:thin}.tabs button{white-space:nowrap;flex-shrink:0}.tabs .active{background:var(--accent);color:#fff}.exhead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.exhead strong{font-size:1.03em}.setrow{display:grid;grid-template-columns:36px 1fr 1fr 45px;gap:8px;align-items:center;margin-top:9px}.setrow input{min-width:0;width:100%;background:#0b1421;border:1px solid var(--line);color:var(--txt);padding:9px 5px;border-radius:9px;text-align:center}.setrow button{height:39px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--txt)}.setrow button.done{background:#126b52;border-color:#22b78b}.tiny{font-size:.76em;color:var(--muted)}.bottom{position:fixed;bottom:0;left:0;right:0;background:#111b2beF;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:5;backdrop-filter:blur(12px)}.bottom button{background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.72em;min-width:68px}.bottom button b{font-size:20px}.bottom button.active{color:var(--accent)}label{display:block;color:var(--muted);margin:12px 0 5px}select,input[type=range]{width:100%;accent-color:var(--accent)}select{padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--txt)}.compact .card{padding:11px}.hide{display:none!important}.historyitem{padding:12px 0;border-bottom:1px solid var(--line)}.pill{border:1px solid var(--line);padding:3px 8px;border-radius:99px;color:var(--muted);font-size:.75em}.timer{position:fixed;right:14px;bottom:calc(90px + env(safe-area-inset-bottom));z-index:6;background:var(--panel2);border:1px solid var(--accent);border-radius:14px;padding:10px 14px;box-shadow:0 6px 20px #0008}.timer button{background:transparent;border:0;color:var(--txt)}@media(min-width:700px){.stats{grid-template-columns:repeat(4,1fr)}.shell{padding:24px}}
+.musclegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.muscle{padding:12px 8px;text-align:left;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--txt)}.muscle.chosen{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 15%,var(--panel2))}.warn{color:#f6bf69;margin:14px 0}@media(max-width:370px){.musclegrid{grid-template-columns:1fr}}</style></head><body><main class="shell"><header class="top"><div class="brand">💪 TREINO<span>PRO</span> <small class="pill">3.0 beta</small></div><button class="iconbtn" onclick="nav(&quot;settings&quot;)" aria-label="Configurações">⚙ Ajustes</button></header><div id="app"><div class="card"><h2>Treino Pro 3.0</h2><p>Carregando seus treinos. Se esta mensagem persistir, recarregue a página.</p><button class="secondary" onclick="location.reload()">Recarregar</button></div></div></main><nav class="bottom" id="bottom"></nav><div id="timer" class="timer hide"></div>
+<script>
+const PRO_DATA = [
+      {
+        id: "yates",
+        name: "Dorian Yates",
+        title: "6x Mr. Olympia — Heavy Duty / HIT",
+        philosophy: "1-2 aquecimentos + 1 SÉRIE DE TRABALHO (WT) além da falha concêntrica com rest-pause e repetições forçadas.",
+        groups: [
+          {
+            name: "Peito & Tríceps",
+            exs: [
+              { name: "Supino Inclinado na Smith / Barra", series: "1 x 6–8 WT", tech: "Falha concêntrica total + 2 repetições forçadas com parceiro.", svg: "supino", rest: 150 },
+              { name: "Supino Inclinado com Halteres", series: "1 x 6–8 WT", tech: "Amplitude completa mantendo alta tensão no peitoral.", svg: "supino", rest: 120 },
+              { name: "Crucifixo Inclinado com Halteres", series: "1 x 8–10 WT", tech: "Pausa de 1 segundo no alongamento inferior.", svg: "supino", rest: 90 },
+              { name: "Crucifixo na Máquina (Peck Deck)", series: "1 x 8–10 WT", tech: "Isometria de 2 segundos no pico de contração.", svg: "supino", rest: 90 },
+              { name: "Crossover no Cabo", series: "1 x 10–12 WT", tech: "Drop-set final reduzindo 25% da carga na falha.", svg: "supino", rest: 90 },
+              { name: "Tríceps Pulley (Barra Reta ou V)", series: "1 x 8–10 WT", tech: "Extensão total travando os cotovelos.", svg: "triceps", rest: 90 },
+              { name: "Tríceps Testa com Barra EZ", series: "1 x 8–10 WT", tech: "Executado em banco com leve inclinação declinada.", svg: "triceps", rest: 90 },
+              { name: "Tríceps Francês Unilateral", series: "1 x 8–10 WT", tech: "Alongamento completo do tríceps atrás da cabeça.", svg: "triceps", rest: 90 }
+            ]
+          },
+          {
+            name: "Costas & Bíceps",
+            exs: [
+              { name: "Pullover na Máquina Nautilus / Halter", series: "1 x 8–10 WT", tech: "Pré-exaustão de dorsais sem fatigar os braços.", svg: "puxada", rest: 120 },
+              { name: "Puxada Alta Supinada (Pegada Invertida)", series: "1 x 6–8 WT", tech: "Puxada até o peito. Falha absoluta de dorsais.", svg: "puxada", rest: 120 },
+              { name: "Remada Curvada com Barra (Pronada)", series: "1 x 6–8 WT", tech: "Tronco a 70 graus com postura travada.", svg: "remada", rest: 150 },
+              { name: "Remada Unilateral Hammer Strength", series: "1 x 6–8 WT", tech: "Contração unilateral pesada por lado.", svg: "remada", rest: 120 },
+              { name: "Elevação Posterior na Máquina", series: "1 x 8–10 WT", tech: "Isolamento estrito de deltoide posterior.", svg: "elevacao", rest: 90 },
+              { name: "Rack Pull (Meio Levantamento Terra)", series: "1 x 8–10 WT", tech: "Barra abaixo do joelho para espessura de dorsais e lombar.", svg: "terra", rest: 180 },
+              { name: "Rosca Inclinada com Halteres", series: "1 x 6–8 WT", tech: "Alongamento total no ponto inicial.", svg: "rosca", rest: 90 },
+              { name: "Rosca Direta com Barra EZ", series: "1 x 6–8 WT", tech: "Carga pesada com controle da fase negativa.", svg: "rosca", rest: 90 }
+            ]
+          },
+          {
+            name: "Ombros & Trapézio",
+            exs: [
+              { name: "Desenvolvimento na Smith / Máquina", series: "1 x 6–8 WT", tech: "Subida explosiva, descida de 3 segundos.", svg: "desenvolvimento", rest: 120 },
+              { name: "Elevação Lateral com Halteres", series: "1 x 8–10 WT", tech: "Elevação com cotovelos levemente dobrados.", svg: "elevacao", rest: 90 },
+              { name: "Elevação Lateral no Cabo", series: "1 x 8–10 WT", tech: "Tensão constante do início ao fim.", svg: "elevacao", rest: 90 },
+              { name: "Encolhimento de Ombros com Barra", series: "1 x 8–10 WT", tech: "Segurar 2 segundos a contração no topo.", svg: "elevacao", rest: 90 }
+            ]
+          },
+          {
+            name: "Pernas Completo",
+            exs: [
+              { name: "Mesa Flexora Deitado", series: "1 x 8–10 WT", tech: "Pré-exaustão para os isquiotibiais.", svg: "flexora", rest: 90 },
+              { name: "Stiff / Terra Romeno", series: "1 x 8–10 WT", tech: "Trabalho pesado com foco na extensão de quadril.", svg: "terra", rest: 120 },
+              { name: "Cadeira Extensora", series: "1 x 8–10 WT", tech: "Pré-exaustão dos quadríceps.", svg: "extensora", rest: 90 },
+              { name: "Leg Press 45°", series: "1 x 10–12 WT", tech: "Amplitude profunda mantendo os pés firmes.", svg: "legpress", rest: 150 },
+              { name: "Agachamento Hack / Smith", series: "1 x 8–10 WT", tech: "Carga máxima e descida controlada.", svg: "agachamento", rest: 150 },
+              { name: "Panturrilha em Pé na Máquina", series: "1 x 10–12 WT", tech: "+ 3 rest-pauses de 10s após a falha.", svg: "panturrilha", rest: 90 },
+              { name: "Panturrilha Sentado (Gêmeos)", series: "1 x 10–12 WT", tech: "Cadência 4-1-2 com pausa no alongamento.", svg: "panturrilha", rest: 90 }
+            ]
+          }
+        ]
+      },
+      {
+        id: "coleman",
+        name: "Ronnie Coleman",
+        title: "8x Mr. Olympia — Power-Bodybuilding",
+        philosophy: "Séries pesadas com pirâmide crescente de cargas e movimentos básicos de força bruta.",
+        groups: [
+          {
+            name: "Peito & Tríceps",
+            exs: [
+              { name: "Supino Reto com Barra Livre", series: "4 x 12, 10, 8, 5–6", tech: "Pirâmide subindo a carga até o limite máximo de força.", svg: "supino", rest: 180 },
+              { name: "Supino Inclinado com Halteres", series: "3–4 x 10–12", tech: "Halteres pesados com amplitude total.", svg: "supino", rest: 120 },
+              { name: "Supino Declinado com Barra", series: "3–4 x 10–12", tech: "Foco no peitoral inferior.", svg: "supino", rest: 120 },
+              { name: "Crucifixo Reto com Halteres", series: "3–4 x 12", tech: "Abertura torácica profunda.", svg: "supino", rest: 90 },
+              { name: "Crossover no Cabo", series: "4 x 12–15", tech: "Contração muscular intensa no centro.", svg: "supino", rest: 75 },
+              { name: "Supino Fechado para Tríceps", series: "4 x 10–12", tech: "Pegada fechada focando na extensão dos cotovelos.", svg: "supino", rest: 120 },
+              { name: "Tríceps Testa com Barra W", series: "4 x 12", tech: "Descida controlada até a testa.", svg: "triceps", rest: 90 },
+              { name: "Tríceps Pulley na Corda", series: "4 x 12–15", tech: "Abertura da corda na parte inferior.", svg: "triceps", rest: 75 },
+              { name: "Mergulho nas Paralelas com Peso", series: "3–4 x 10–12", tech: "Uso de anilhas presas ao cinturão.", svg: "triceps", rest: 120 }
+            ]
+          },
+          {
+            name: "Costas & Bíceps",
+            exs: [
+              { name: "Levantamento Terra (do chão)", series: "4 x 12, 10, 8, 2–4", tech: "Progressão de cargas extremas do chão.", svg: "terra", rest: 240 },
+              { name: "Remada Curvada com Barra T (Cavalo)", series: "4 x 10–12", tech: "Puxada pesada mantendo a coluna estável.", svg: "remada", rest: 150 },
+              { name: "Remada Curvada com Barra Livre", series: "4 x 10–12", tech: "Pegada pronada para espessura.", svg: "remada", rest: 120 },
+              { name: "Remada Unilateral com Halter (Serrote)", series: "3–4 x 10–12", tech: "Puxada pesada unilateral.", svg: "remada", rest: 120 },
+              { name: "Puxada Alta Frente no Pulley", series: "4 x 10–12", tech: "Tração com os cotovelos apontados para baixo.", svg: "puxada", rest: 90 },
+              { name: "Rosca Direta com Barra Reta", series: "4 x 12, 10, 8, 8", tech: "Construção de massa bruta para o bíceps.", svg: "rosca", rest: 120 },
+              { name: "Rosca Alternada em Pé com Halteres", series: "4 x 10–12", tech: "Rotação do punho no ponto alto.", svg: "rosca", rest: 90 },
+              { name: "Rosca Scott com Barra EZ", series: "3–4 x 12", tech: "Isolamento com apoio no banco.", svg: "rosca", rest: 90 }
+            ]
+          },
+          {
+            name: "Ombros & Trapézio",
+            exs: [
+              { name: "Desenvolvimento Militar pela Frente", series: "4 x 12, 10, 8, 6", tech: "Movimento composto de elevação de carga.", svg: "desenvolvimento", rest: 150 },
+              { name: "Desenvolvimento Sentado com Halteres", series: "4 x 10–12", tech: "Desenvolvimento pesado para deltoide anterior e médio.", svg: "desenvolvimento", rest: 120 },
+              { name: "Elevação Lateral com Halteres", series: "4 x 12–15", tech: "Movimento contínuo e pesado.", svg: "elevacao", rest: 90 },
+              { name: "Elevação Frontal com Anilha/Halter", series: "3–4 x 12", tech: "Elevação até a altura dos olhos.", svg: "elevacao", rest: 75 },
+              { name: "Encolhimento com Halteres Pesados", series: "4 x 12–15", tech: "Elevação pura dos trapézios.", svg: "elevacao", rest: 90 }
+            ]
+          },
+          {
+            name: "Pernas Completo",
+            exs: [
+              { name: "Agachamento Livre com Barra", series: "4–5 x 12, 10, 8, 6, 2", tech: "Série clássica com progressão até cargas elevadas.", svg: "agachamento", rest: 240 },
+              { name: "Leg Press 45°", series: "4 x 12–15", tech: "Uso da capacidade total de carga do aparelho.", svg: "legpress", rest: 180 },
+              { name: "Passada (Walking Lunges)", series: "4 x 20–30 passos", tech: "Passadas longas com peso livre.", svg: "agachamento", rest: 180 },
+              { name: "Mesa Flexora Deitado", series: "4 x 12–15", tech: "Foco na contração dos isquiotibiais.", svg: "flexora", rest: 90 },
+              { name: "Panturrilha no Leg Press / em Pé", series: "4–5 x 15–20", tech: "Extensão e flexão plantar completa.", svg: "panturrilha", rest: 90 }
+            ]
+          }
+        ]
+      },
+      {
+        id: "heath",
+        name: "Phil Heath",
+        title: "7x Mr. Olympia — Protocolo FST-7",
+        philosophy: "Exercícios base seguidos por 7 SÉRIES FINAIS no isolador com 30s de descanso para esticar a fáscia muscular.",
+        groups: [
+          {
+            name: "Peito",
+            exs: [
+              { name: "Supino Inclinado com Halteres", series: "4 x 8–10", tech: "Construção de volume na porção superior.", svg: "supino", rest: 120 },
+              { name: "Supino Inclinado na Hammer Strength", series: "3–4 x 10–12", tech: "Tensão muscular contínua.", svg: "supino", rest: 90 },
+              { name: "Supino Reto em Máquina Articulada", series: "3–4 x 10–12", tech: "Foco no miolo do peitoral.", svg: "supino", rest: 90 },
+              { name: "Crucifixo Inclinado na Polia", series: "3 x 10–12", tech: "Uso de cabos para manter o peitoral sob carga constante.", svg: "supino", rest: 90 },
+              { name: "Peck Deck / Crossover (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: Exatamente 30s de descanso entre as 7 séries.", svg: "supino", rest: 30 }
+            ]
+          },
+          {
+            name: "Costas",
+            exs: [
+              { name: "Puxada Alta Aberta no Cabo", series: "4 x 10–12", tech: "Foco na largura do latíssimo do dorso.", svg: "puxada", rest: 90 },
+              { name: "Puxada com Pegada Triângulo", series: "3–4 x 10–12", tech: "Puxada até a parte inferior do peito.", svg: "puxada", rest: 90 },
+              { name: "Remada Articulada Hammer Neutra", series: "3–4 x 8–10", tech: "Densidade no miolo das costas.", svg: "remada", rest: 90 },
+              { name: "Remada Baixa no Cabo", series: "3–4 x 10–12", tech: "Contração mantida por 1 segundo.", svg: "remada", rest: 90 },
+              { name: "Pullover no Cabo com Corda (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: 30s de descanso entre as 7 séries.", svg: "puxada", rest: 30 }
+            ]
+          },
+          {
+            name: "Braços (Bíceps & Tríceps)",
+            exs: [
+              { name: "Rosca Alternada Inclinada", series: "3–4 x 10–12", tech: "Alongamento da cabeça longa do bíceps.", svg: "rosca", rest: 90 },
+              { name: "Rosca Direta com Barra W", series: "3–4 x 8–10", tech: "Carga com execução estrita.", svg: "rosca", rest: 90 },
+              { name: "Rosca Scott Unilateral Halter", series: "3 x 10–12", tech: "Pico de contração concentrada.", svg: "rosca", rest: 75 },
+              { name: "Rosca Dupla no Cabo Alto (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: 30s de descanso entre cada série.", svg: "rosca", rest: 30 },
+              { name: "Tríceps Francês Sentado Halter", series: "3–4 x 10–12", tech: "Alongamento profundo da cabeça longa.", svg: "triceps", rest: 90 },
+              { name: "Mergulho em Máquina para Tríceps", series: "3–4 x 8–10", tech: "Desenvolvimento de carga em máquina articulada.", svg: "triceps", rest: 90 },
+              { name: "Tríceps Pulley Barra Reta (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: 30s de descanso entre cada série.", svg: "triceps", rest: 30 }
+            ]
+          },
+          {
+            name: "Pernas Completo",
+            exs: [
+              { name: "Cadeira Extensora", series: "4 x 10–12", tech: "Aquecimento e isolamento inicial.", svg: "extensora", rest: 90 },
+              { name: "Agachamento Hack / Frontal Smith", series: "4 x 8–10", tech: "Amplitude e postura vertical do tronco.", svg: "agachamento", rest: 120 },
+              { name: "Leg Press 45°", series: "4 x 10–12", tech: "Pés posicionados no meio da plataforma.", svg: "legpress", rest: 120 },
+              { name: "Leg Press ou Extensora (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: 30s de descanso para bombeamento sanguíneo.", svg: "extensora", rest: 30 },
+              { name: "Mesa Flexora Deitado", series: "4 x 10–12", tech: "Isolamento dos isquiotibiais.", svg: "flexora", rest: 90 },
+              { name: "Cadeira Flexora (FST-7)", series: "7 x 10–12", tech: "PROTOCOL FST-7: 30s de descanso em cada série final.", svg: "flexora", rest: 30 }
+            ]
+          }
+        ]
+      },
+      {
+        id: "cutler",
+        name: "Jay Cutler",
+        title: "4x Mr. Olympia — Volume & Densidade",
+        philosophy: "Volume elevado de 20 a 24 séries totais por grupo muscular com descansos curtos de 45 a 60 segundos.",
+        groups: [
+          {
+            name: "Peito",
+            exs: [
+              { name: "Supino Inclinado com Halteres", series: "4 x 10–12", tech: "Movimento fluido sem travar os cotovelos no topo.", svg: "supino", rest: 60 },
+              { name: "Supino Reto com Barra", series: "3–4 x 10–12", tech: "Ritmo rápido e controlado.", svg: "supino", rest: 60 },
+              { name: "Supino Declinado na Smith", series: "3–4 x 10–12", tech: "Trabalho direcionado ao peitoral inferior.", svg: "supino", rest: 60 },
+              { name: "Crucifixo Inclinado com Halteres", series: "3–4 x 12", tech: "Abertura constante de braços.", svg: "supino", rest: 45 },
+              { name: "Pullover com Halter", series: "3 x 12", tech: "Foco no alongamento peitoral e dentes da serrátil.", svg: "supino", rest: 45 },
+              { name: "Crossover de Baixo para Cima", series: "3–4 x 12–15", tech: "Pico de contração na porção superior.", svg: "supino", rest: 45 }
+            ]
+          },
+          {
+            name: "Ombros & Trapézio",
+            exs: [
+              { name: "Desenvolvimento Sentado Halteres", series: "4 x 10–12", tech: "Séries pesadas mantendo ritmo constante.", svg: "desenvolvimento", rest: 60 },
+              { name: "Elevação Lateral em Pé Halteres", series: "4 x 12", tech: "Ligeira inclinação do tronco à frente.", svg: "elevacao", rest: 45 },
+              { name: "Elevação Lateral Sentado", series: "3–4 x 12", tech: "Elimina qualquer impulso do corpo.", svg: "elevacao", rest: 45 },
+              { name: "Elevação Frontal com Barra", series: "3 x 12", tech: "Subida controlada até o nível dos olhos.", svg: "elevacao", rest: 45 },
+              { name: "Crucifixo Invertido no Peck Deck", series: "4 x 12–15", tech: "Foco total na porção posterior do deltoide.", svg: "elevacao", rest: 45 },
+              { name: "Encolhimento com Barra / Halter", series: "4 x 12–15", tech: "Trabalho denso de trapézio superior.", svg: "elevacao", rest: 45 }
+            ]
+          },
+          {
+            name: "Pernas Completo",
+            exs: [
+              { name: "Cadeira Extensora (Pré-exaustão)", series: "4 x 12–15", tech: "Aquecimento e volume inicial para os joelhos.", svg: "extensora", rest: 60 },
+              { name: "Agachamento Livre com Barra", series: "4 x 8–10", tech: "Base de pés larga e descida funda.", svg: "agachamento", rest: 90 },
+              { name: "Agachamento Hack", series: "4 x 10–12", tech: "Enfase no vasto lateral.", svg: "agachamento", rest: 60 },
+              { name: "Leg Press 45°", series: "4 x 10–12", tech: "Ritmo intenso com pouco intervalo de descanso.", svg: "legpress", rest: 60 },
+              { name: "Passada com Barra (Lunges)", series: "3 x 20 passos", tech: "Resistência de força para quadríceps.", svg: "agachamento", rest: 60 },
+              { name: "Mesa Flexora Deitado", series: "4 x 10–12", tech: "Trabalho contínuo de isquiotibiais.", svg: "flexora", rest: 45 }
+            ]
+          }
+        ]
+      },
+      {
+        id: "mentzer",
+        name: "Mike Mentzer",
+        title: "Heavy Duty Radical (Alta Intensidade)",
+        philosophy: "1 SÉRIE PRINCIPAL DE TRABALHO até a falha absoluta com cadência super lenta (4s descida / 2s pausa / 4s subida) e pré-exaustão.",
+        groups: [
+          {
+            name: "Peito & Ombros",
+            exs: [
+              { name: "Crucifixo Halter ou Crossover", series: "1 x 8–10 WT", tech: "Pré-exaustão: Transição direta sem descanso para o próximo exercício.", svg: "supino", rest: 0 },
+              { name: "Supino Inclinado com Barra/Halter", series: "1 x 3–5 WT", tech: "Executado imediatamente após o crucifixo.", svg: "supino", rest: 180 },
+              { name: "Elevação Lateral com Halteres", series: "1 x 8–10 WT", tech: "Pré-exaustão do deltoide médio.", svg: "elevacao", rest: 0 },
+              { name: "Desenvolvimento Sentado na Smith", series: "1 x 4–6 WT", tech: "Carga máxima com cadência ultra lenta.", svg: "desenvolvimento", rest: 180 }
+            ]
+          },
+          {
+            name: "Costas & Braços",
+            exs: [
+              { name: "Pullover com Halter ou Máquina", series: "1 x 8–10 WT", tech: "Pré-exaustão de dorsais sem uso de bíceps.", svg: "puxada", rest: 0 },
+              { name: "Puxada Alta Supinada (Fechada)", series: "1 x 6–8 WT", tech: "Executada imediatamente após o pullover.", svg: "puxada", rest: 180 },
+              { name: "Levantamento Terra", series: "1 x 6–8 WT", tech: "Falha concêntrica na cadeia posterior.", svg: "terra", rest: 240 },
+              { name: "Rosca Direta com Barra Reta", series: "1 x 6–8 WT", tech: "Cadência estrita sem balanço do tronco.", svg: "rosca", rest: 120 },
+              { name: "Tríceps Pulley na Barra", series: "1 x 8–10 WT", tech: "Pré-exaustão de tríceps.", svg: "triceps", rest: 0 },
+              { name: "Paralelas com Peso Adicional", series: "1 x 4–6 WT", tech: "Carga pesada até a falha total.", svg: "triceps", rest: 180 }
+            ]
+          },
+          {
+            name: "Pernas Completo",
+            exs: [
+              { name: "Cadeira Extensora", series: "1 x 8–10 WT", tech: "Pré-exaustão de quadríceps.", svg: "extensora", rest: 0 },
+              { name: "Leg Press ou Agachamento Livre", series: "1 x 6–8 WT", tech: "Executado imediatamente após a extensora.", svg: "legpress", rest: 240 },
+              { name: "Mesa Flexora", series: "1 x 8–10 WT", tech: "Cadência controlada em 4-2-4.", svg: "flexora", rest: 120 },
+              { name: "Panturrilha em Pé", series: "1 x 12–15 WT", tech: "Isometria de 3 segundos na extensão máxima.", svg: "panturrilha", rest: 90 }
+            ]
+          }
+        ]
+      },
+      {
+        id: "arnold",
+        name: "Arnold Schwarzenegger",
+        title: "7x Mr. Olympia — Golden Era",
+        philosophy: "4 a 5 séries em pirâmide (15-12-10-8-6 repetições) subindo carga + bi-sets antagonistas de alto volume.",
+        groups: [
+          {
+            name: "Peito & Costas (Bi-Sets)",
+            exs: [
+              { name: "Supino Reto com Barra Livre", series: "5 x 15, 12, 10, 8, 6", tech: "Pirâmide subindo a carga a cada série.", svg: "supino", rest: 120 },
+              { name: "Barra Fixa Puxada Aberta", series: "5 x 10–12", tech: "Executada alternada ou logo após o supino.", svg: "puxada", rest: 120 },
+              { name: "Supino Inclinado com Barra", series: "5 x 15, 12, 10, 8, 6", tech: "Foco no peitoral superior.", svg: "supino", rest: 120 },
+              { name: "Remada Curvada com Barra Livre", series: "5 x 15, 12, 10, 8, 6", tech: "Tronco inclinado paralelo ao chão.", svg: "remada", rest: 120 },
+              { name: "Crucifixo Reto com Halteres", series: "4 x 10–12", tech: "Abertura máxima no banco.", svg: "supino", rest: 90 },
+              { name: "Pullover com Halter", series: "4 x 15", tech: "Expansão da caixa torácica no final do treino.", svg: "supino", rest: 90 }
+            ]
+          },
+          {
+            name: "Ombros & Braços",
+            exs: [
+              { name: "Desenvolvimento Arnold (Arnold Press)", series: "5 x 12, 10, 8, 6, 6", tech: "Rotação completa dos punhos durante a subida.", svg: "desenvolvimento", rest: 120 },
+              { name: "Elevação Lateral com Halteres", series: "5 x 10–12", tech: "Elevação além da linha paralela do ombro.", svg: "elevacao", rest: 90 },
+              { name: "Rosca Direta com Barra Reta", series: "5 x 15, 12, 10, 8, 6", tech: "Progressão de cargas em pirâmide.", svg: "rosca", rest: 120 },
+              { name: "Rosca Alternada Inclinada Halteres", series: "4 x 8–10", tech: "Supinação total com o braço estendido.", svg: "rosca", rest: 90 },
+              { name: "Tríceps Testa com Barra EZ", series: "5 x 10–12", tech: "Execução focada na extensão do cotovelo.", svg: "triceps", rest: 90 },
+              { name: "Mergulho nas Paralelas", series: "5 x 10–15", tech: "Inclinando o corpo para frente.", svg: "triceps", rest: 90 }
+            ]
+          },
+          {
+            name: "Pernas",
+            exs: [
+              { name: "Agachamento Livre com Barra", series: "5 x 15, 12, 10, 8, 6", tech: "Agachamento profundo com progressão de carga.", svg: "agachamento", rest: 180 },
+              { name: "Agachamento Frontal", series: "4 x 8–10", tech: "Postura ereta focando em quadríceps.", svg: "agachamento", rest: 120 },
+              { name: "Stiff / Terra Romeno", series: "4 x 10–12", tech: "Alongamento completo de isquiotibiais.", svg: "terra", rest: 120 },
+              { name: "Panturrilha 'Donkey' (Burro)", series: "5 x 15–20", tech: "Flexão plantar profunda.", svg: "panturrilha", rest: 90 }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const USER_FICHAS = {
+      ABCD: {
+        title: "Sua Ficha Pessoal ABCD (4 Dias/Semana)",
+        philosophy: "Divisão Upper/Lower com estímulo duplo semanal, volume ajustado e foco na progressão de carga (RIR 1-2).",
+        days: [
+          {
+            name: "Treino A — Upper 1 (Peito & Costas)",
+            exs: [
+              { name: "Supino Inclinado com Halteres", series: "3 x 6–10", tech: "RIR 1-2. Descanso 2:30. Progressão de carga pesada.", svg: "supino", rest: 150 },
+              { name: "Remada Articulada com Apoio", series: "3 x 8–10", tech: "RIR 1-2. Descanso 2:00. Pegada neutra.", svg: "remada", rest: 120 },
+              { name: "Supino Reto em Máquina", series: "3 x 8–12", tech: "RIR 1-2. Descanso 2:00. Foco no peitoral médio.", svg: "supino", rest: 120 },
+              { name: "Puxada Alta Neutra", series: "3 x 8–12", tech: "RIR 1-2. Descanso 2:00. Puxada estrita.", svg: "puxada", rest: 120 },
+              { name: "Elevação Lateral com Halteres", series: "3 x 12–20", tech: "RIR 1-2. Descanso 1:15. Deltoide médio.", svg: "elevacao", rest: 75 },
+              { name: "Tríceps Corda na Polia", series: "2 x 10–15", tech: "RIR 1-2. Descanso 1:15. Extensão completa.", svg: "triceps", rest: 75 },
+              { name: "Rosca Direta Barra EZ", series: "2 x 8–12", tech: "RIR 1-2. Descanso 1:30. Bíceps.", svg: "rosca", rest: 90 }
+            ]
+          },
+          {
+            name: "Treino B — Lower 1 (Quadríceps)",
+            exs: [
+              { name: "Agachamento Livre ou Hack", series: "3 x 6–10", tech: "RIR 1-2. Descanso 3:00. Exercício base de pernas.", svg: "agachamento", rest: 180 },
+              { name: "Leg Press 45°", series: "3 x 10–12", tech: "RIR 1-2. Descanso 2:30. Amplitude profunda.", svg: "legpress", rest: 150 },
+              { name: "Cadeira Extensora", series: "2 x 12–15", tech: "RIR 1-2. Descanso 1:30. Isolamento de quadríceps.", svg: "extensora", rest: 90 },
+              { name: "Mesa Flexora", series: "3 x 10–15", tech: "RIR 1-2. Descanso 1:30. Posterior de coxa.", svg: "flexora", rest: 90 },
+              { name: "Panturrilha em Pé", series: "4 x 8–12", tech: "RIR 1-2. Descanso 1:30. Carga e amplitude.", svg: "panturrilha", rest: 90 },
+              { name: "Abdominal na Polia", series: "3 x 10–15", tech: "RIR 1-2. Descanso 1:00. Carga progressiva.", svg: "abs", rest: 60 }
+            ]
+          },
+          {
+            name: "Treino C — Upper 2 (Costas, Ombros & Braços)",
+            exs: [
+              { name: "Barra Fixa ou Puxada Alta", series: "3 x 6–10", tech: "RIR 1-2. Descanso 2:30. Foco em largura.", svg: "puxada", rest: 150 },
+              { name: "Supino Inclinado em Máquina", series: "3 x 8–12", tech: "RIR 1-2. Descanso 2:00. Volume superior.", svg: "supino", rest: 120 },
+              { name: "Remada Baixa Neutra", series: "3 x 10–12", tech: "RIR 1-2. Descanso 2:00. Espessura de dorsais.", svg: "remada", rest: 120 },
+              { name: "Desenvolvimento em Máquina", series: "2 x 8–12", tech: "RIR 1-2. Descanso 2:00. Ombros.", svg: "desenvolvimento", rest: 120 },
+              { name: "Elevação Lateral na Polia", series: "2 x 12–20", tech: "RIR 1-2. Descanso 1:15. Tensão constante.", svg: "elevacao", rest: 75 },
+              { name: "Rosca Inclinada Halteres", series: "3 x 10–12", tech: "RIR 1-2. Descanso 1:30. Alongamento de bíceps.", svg: "rosca", rest: 90 },
+              { name: "Tríceps Francês na Polia", series: "3 x 10–15", tech: "RIR 1-2. Descanso 1:30. Cabeça longa.", svg: "triceps", rest: 90 }
+            ]
+          },
+          {
+            name: "Treino D — Lower 2 (Posterior & Glúteos)",
+            exs: [
+              { name: "Terra Romeno (Stiff)", series: "3 x 6–10", tech: "RIR 1-2. Descanso 3:00. Cadeia posterior.", svg: "terra", rest: 180 },
+              { name: "Cadeira Flexora", series: "3 x 10–15", tech: "RIR 1-2. Descanso 1:30. Isquiotibiais.", svg: "flexora", rest: 90 },
+              { name: "Agachamento Búlgaro", series: "3 x 8–12/perna", tech: "RIR 1-2. Descanso 2:00. Unilateral.", svg: "agachamento", rest: 120 },
+              { name: "Hip Thrust (Elevação Pélvica)", series: "2 x 8–12", tech: "RIR 1-2. Descanso 2:00. Foco em glúteos.", svg: "terra", rest: 120 },
+              { name: "Panturrilha Sentado", series: "4 x 12–20", tech: "RIR 1-2. Descanso 1:15. Foco em sóleo.", svg: "panturrilha", rest: 75 }
+            ]
+          }
+        ]
+      },
+      ABC: {
+        title: "Sua Ficha Pessoal ABC (3 Dias/Semana - FullBody)",
+        philosophy: "Três treinos semanais cobrindo o corpo todo com foco em exercícios compostos e alta eficiência.",
+        days: [
+          {
+            name: "Treino A — FullBody A",
+            exs: [
+              { name: "Agachamento Livre", series: "3 x 6–10", tech: "Base de pernas e força.", svg: "agachamento", rest: 180 },
+              { name: "Supino Inclinado Halteres", series: "3 x 6–10", tech: "Empurrar horizontal/inclinado.", svg: "supino", rest: 150 },
+              { name: "Remada Apoiada na Smith/Máquina", series: "3 x 8–12", tech: "Puxar horizontal.", svg: "remada", rest: 120 },
+              { name: "Elevação Lateral Halteres", series: "3 x 12–20", tech: "Deltoide médio.", svg: "elevacao", rest: 75 },
+              { name: "Rosca Direta Barra EZ", series: "2 x 8–12", tech: "Isolamento de bíceps.", svg: "rosca", rest: 90 }
+            ]
+          },
+          {
+            name: "Treino B — FullBody B",
+            exs: [
+              { name: "Terra Romeno (Stiff)", series: "3 x 6–10", tech: "Cadeia posterior.", svg: "terra", rest: 180 },
+              { name: "Puxada Alta Neutra", series: "3 x 8–12", tech: "Puxar vertical.", svg: "puxada", rest: 120 },
+              { name: "Supino Reto em Máquina", series: "3 x 8–12", tech: "Empurrar horizontal.", svg: "supino", rest: 120 },
+              { name: "Leg Press 45°", series: "3 x 10–12", tech: "Volume de quadríceps.", svg: "legpress", rest: 150 },
+              { name: "Tríceps Corda", series: "3 x 10–15", tech: "Isolamento de tríceps.", svg: "triceps", rest: 75 }
+            ]
+          },
+          {
+            name: "Treino C — FullBody C",
+            exs: [
+              { name: "Agachamento Búlgaro", series: "3 x 8–12/perna", tech: "Unilateral de pernas.", svg: "agachamento", rest: 120 },
+              { name: "Remada Baixa Neutra", series: "3 x 8–12", tech: "Puxada de espessura.", svg: "remada", rest: 120 },
+              { name: "Desenvolvimento Máquina", series: "2 x 8–12", tech: "Empurrar vertical.", svg: "desenvolvimento", rest: 120 },
+              { name: "Cadeira Flexora", series: "3 x 10–15", tech: "Isquiotibiais.", svg: "flexora", rest: 90 },
+              { name: "Panturrilha Sentado", series: "3 x 12–20", tech: "Gêmeos/Sóleo.", svg: "panturrilha", rest: 75 }
+            ]
+          }
+        ]
+      }
+    };
+
+
+const KEY='treinopro_v3';let state;try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){state={}};state={split:'ABCD',day:0,tab:'planner',logs:{},sessions:[],settings:{accent:'#3b82f6',font:15,compact:false},...state};let session=null,timerId=null,remaining=0;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){alert('O armazenamento está indisponível neste navegador.')}}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function day(){return USER_FICHAS[state.split].days[state.day]||USER_FICHAS[state.split].days[0]}function exercises(){return day().exs}function setCount(ex){return Math.max(1,Math.min(8,parseInt(ex.series)||3))}function key(i,j){return state.split+':'+state.day+':'+i+':'+j}function getlog(i,j){return state.logs[key(i,j)]||{kg:'',reps:'',done:false}}function doneCount(){return exercises().reduce((n,e,i)=>n+Array.from({length:setCount(e)},(_,j)=>getlog(i,j).done?1:0).reduce((a,b)=>a+b,0),0)}function totalSets(){return exercises().reduce((n,e)=>n+setCount(e),0)}
+function weekStart(d){let x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-(x.getDay()+6)%7);return x.getTime()}function thisWeek(){return state.sessions.filter(s=>s.date>=weekStart(new Date()))}function fmtDate(t){return new Date(t).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})}
+function applySettings(){document.documentElement.style.setProperty('--accent',state.settings.accent);document.documentElement.style.setProperty('--font',state.settings.font+'px');document.body.classList.toggle('compact',!!state.settings.compact)}
+function nav(tab){state.tab=tab;save();render();scrollTo(0,0)}
+function start(){session={start:Date.now(),split:state.split,day:state.day};state.tab='workout';save();render()}
+function complete(){const count=doneCount();if(!count){alert('Marque pelo menos uma série concluída.');return}const volume=exercises().reduce((sum,e,i)=>sum+Array.from({length:setCount(e)},(_,j)=>getlog(i,j)).reduce((a,l)=>a+(l.done?(Number(l.kg)||0)*(Number(l.reps)||0):0),0),0);state.sessions.unshift({date:Date.now(),name:day().name,sets:count,volume,minutes:session?Math.max(1,Math.round((Date.now()-session.start)/60000)):null});state.sessions=state.sessions.slice(0,250);Object.keys(state.logs).forEach(k=>{if(k.startsWith(state.split+':'+state.day+':'))state.logs[k].done=false});session=null;state.tab='history';save();render();alert('Treino registrado!')}
+function updateLog(i,j,field,val){let k=key(i,j);state.logs[k]||={kg:'',reps:'',done:false};state.logs[k][field]=val;save();if(field==='done'){const b=document.getElementById('done-'+i+'-'+j);if(b){b.classList.toggle('done',val);b.textContent=val?'✓':'○'}const x=document.getElementById('counter');if(x)x.textContent=doneCount()+'/'+totalSets()+' séries'}}
+function timer(sec){clearInterval(timerId);remaining=sec;let el=document.getElementById('timer');el.classList.remove('hide');function tick(){el.innerHTML='<span>⏱ '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0')+'</span> <button onclick="stopTimer()" aria-label="Fechar">✕</button>';if(remaining<=0){clearInterval(timerId);return}remaining--}tick();timerId=setInterval(tick,1000)}function stopTimer(){clearInterval(timerId);document.getElementById('timer').classList.add('hide')}
+function renderHome(){let w=thisWeek(),n=doneCount(),all=totalSets();return '<div class="eyebrow">Seu painel de hipertrofia</div><h1>Seu próximo treino</h1><div class="stats"><div class="card"><div class="muted">Treinos na semana</div><div class="num">'+w.length+' / '+(state.split==='ABCD'?4:3)+'</div></div><div class="card"><div class="muted">Séries nesta ficha</div><div class="num">'+all+'</div></div></div><div class="card"><div class="row"><span class="pill">Divisão '+state.split+'</span><span class="muted">'+exercises().length+' exercícios</span></div><h2>'+esc(day().name)+'</h2><p>'+esc(USER_FICHAS[state.split].philosophy)+'</p><div class="muted" id="counter">'+n+'/'+all+' séries marcadas</div><div class="progress"><div style="width:'+(all?100*n/all:0)+'%"></div></div><button class="primary" onclick="start()">Iniciar treino</button> <button class="secondary" onclick="nav(&quot;workout&quot;)">Ver ficha</button></div><h2>Últimas sessões</h2>'+(state.sessions.length?state.sessions.slice(0,3).map(s=>'<div class="card"><b>'+esc(s.name)+'</b><div class="muted">'+fmtDate(s.date)+' · '+s.sets+' séries</div></div>').join(''):'<p>Conclua seu primeiro treino para acompanhar a evolução.</p>')}
+function renderWorkout(){let ds=USER_FICHAS[state.split].days;return '<h1>Minha ficha de treino</h1><div class="row"><span class="muted">Divisão '+state.split+'</span><button class="secondary" onclick="nav(&quot;settings&quot;)">Trocar divisão</button></div><div class="tabs">'+ds.map((d,i)=>'<button class="secondary '+(state.day===i?'active':'')+'" onclick="state.day='+i+';save();render()">'+esc(d.name.split(' — ')[0])+'</button>').join('')+'</div><div class="card"><b>'+esc(day().name)+'</b><p>'+esc(USER_FICHAS[state.split].philosophy)+'</p><div class="row"><span id="counter">'+doneCount()+'/'+totalSets()+' séries</span><button class="primary" onclick="complete()">Concluir treino</button></div></div>'+exercises().map((e,i)=>'<section class="card"><div class="exhead"><div><strong>'+(i+1)+'. '+esc(e.name)+'</strong><div class="muted">'+esc(e.series)+' · descanso '+(e.rest||90)+'s</div></div><button class="secondary" onclick="timer('+(e.rest||90)+')">⏱</button></div><div class="tiny">'+esc(e.tech||'')+'</div><div class="setrow tiny"><span>Série</span><span>Carga (kg)</span><span>Reps</span><span>Feita</span></div>'+Array.from({length:setCount(e)},(_,j)=>{let l=getlog(i,j);return '<div class="setrow"><span class="muted">'+(j+1)+'</span><input type="number" min="0" step="0.5" inputmode="decimal" aria-label="Carga série '+(j+1)+'" value="'+esc(l.kg)+'" onchange="updateLog('+i+','+j+',\'kg\',this.value)"><input type="number" min="0" step="1" inputmode="numeric" aria-label="Repetições série '+(j+1)+'" value="'+esc(l.reps)+'" onchange="updateLog('+i+','+j+',\'reps\',this.value)"><button id="done-'+i+'-'+j+'" class="'+(l.done?'done':'')+'" onclick="updateLog('+i+','+j+',\'done\',!getlog('+i+','+j+').done)">'+(l.done?'✓':'○')+'</button></div>'}).join('')+'</section>').join('')}
+function renderHistory(){let s=state.sessions,w=thisWeek(),volume=w.reduce((n,x)=>n+x.volume,0);return '<h1>Histórico e evolução</h1><div class="stats"><div class="card"><div class="muted">Sessões totais</div><div class="num">'+s.length+'</div></div><div class="card"><div class="muted">Volume semanal</div><div class="num">'+Math.round(volume).toLocaleString('pt-BR')+'</div><div class="tiny">kg × repetições</div></div></div><h2>Treinos registrados</h2>'+(s.length?s.map(x=>'<div class="historyitem"><b>'+esc(x.name)+'</b><div class="muted">'+fmtDate(x.date)+' · '+x.sets+' séries · '+Math.round(x.volume).toLocaleString('pt-BR')+' kg × reps'+(x.minutes?' · '+x.minutes+' min':'')+'</div></div>').join(''):'<p>Nenhuma sessão registrada ainda.</p>')+'<div class="card"><p>Os registros ficam neste navegador. Exporte um backup em Ajustes para não perder o histórico.</p></div>'}
+function renderPros(){return '<h1>Biblioteca Pro</h1><p>Rotinas históricas como referência, não como prescrição individual.</p><div class="tabs">'+PRO_DATA.map((p,i)=>'<button class="secondary '+(state.pro===i?'active':'')+'" onclick="state.pro='+i+';save();render()">'+esc(p.name)+'</button>').join('')+'</div>'+(()=>{let p=PRO_DATA[state.pro||0];return '<div class="card"><h2>'+esc(p.name)+'</h2><div class="muted">'+esc(p.title)+'</div><p>'+esc(p.philosophy)+'</p></div>'+p.groups.map(g=>'<details class="card"><summary><b>'+esc(g.name)+'</b> <span class="muted">('+g.exs.length+')</span></summary>'+g.exs.map(e=>'<div class="historyitem"><b>'+esc(e.name)+'</b><div class="muted">'+esc(e.series)+'</div><div class="tiny">'+esc(e.tech||'')+'</div></div>').join('')+'</details>').join('')})()}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='treinopro-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function importData(el){let f=el.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!x.logs||!Array.isArray(x.sessions))throw Error();if(confirm('Substituir os registros atuais pelo backup?')){state={...state,...x};save();render()}}catch(e){alert('Arquivo de backup inválido')}};r.readAsText(f)}
+function renderSettings(){return '<h1>Personalização</h1><div class="card"><label for="split">Divisão de treino</label><select id="split" onchange="state.split=this.value;state.day=0;save();render()"><option value="ABCD" '+(state.split==='ABCD'?'selected':'')+'>ABCD · 4 dias/semana</option><option value="ABC" '+(state.split==='ABC'?'selected':'')+'>ABC · 3 dias/semana</option></select><label for="accent">Cor de destaque</label><select id="accent" onchange="state.settings.accent=this.value;save();render()">'+[['#3b82f6','Azul'],['#10b981','Verde'],['#a78bfa','Roxo'],['#f59e0b','Âmbar'],['#ef4444','Vermelho']].map(c=>'<option value="'+c[0]+'" '+(state.settings.accent===c[0]?'selected':'')+'>'+c[1]+'</option>').join('')+'</select><label for="font">Tamanho da fonte: '+state.settings.font+'px</label><input id="font" type="range" min="13" max="21" step="1" value="'+state.settings.font+'" onchange="state.settings.font=Number(this.value);save();render()"><label><input type="checkbox" '+(state.settings.compact?'checked':'')+' onchange="state.settings.compact=this.checked;save();render()"> Cartões compactos</label></div><h2>Seus dados</h2><div class="card"><p>Dados salvos somente neste navegador. A versão 2.0 usa um armazenamento separado da versão anterior.</p><button class="secondary" onclick="exportData()">Exportar backup JSON</button> <label for="import">Restaurar backup</label><input id="import" type="file" accept=".json,application/json" onchange="importData(this)"></div>'}
+
+const MUSCLES=[['peito','Peito'],['costas','Costas'],['biceps','Bíceps'],['triceps','Tríceps'],['ombro_anterior','Ombro anterior'],['ombro_lateral','Ombro lateral'],['ombro_posterior','Ombro posterior'],['quadriceps','Quadríceps'],['posterior','Posterior / glúteos'],['panturrilha','Panturrilha'],['abdomen','Abdômen'],['aerobico','Aeróbico']];
+const BANK=[
+['peito','Supino inclinado com halteres',3,'6–10',150,'composto'],['peito','Supino reto máquina',3,'8–12',120,'composto'],['peito','Voador (Peck Deck)',2,'12–15',75,'isolador'],['peito','Crossover no cabo',2,'12–15',75,'isolador'],
+['costas','Puxada alta neutra',3,'8–12',120,'composto'],['costas','Remada apoiada máquina',3,'8–12',120,'composto'],['costas','Remada baixa neutra',2,'10–12',90,'composto'],['costas','Pullover na polia',2,'12–15',75,'isolador'],
+['biceps','Rosca direta barra EZ',3,'8–12',90,'isolador'],['biceps','Rosca inclinada halteres',2,'10–12',75,'isolador'],['biceps','Rosca martelo',2,'10–15',75,'isolador'],
+['triceps','Tríceps pulley',3,'10–12',75,'isolador'],['triceps','Tríceps francês',2,'10–15',75,'isolador'],['triceps','Tríceps testa EZ',2,'8–12',90,'isolador'],
+['ombro_anterior','Desenvolvimento máquina',3,'8–12',120,'composto'],['ombro_anterior','Desenvolvimento halteres',2,'8–12',120,'composto'],
+['ombro_lateral','Elevação lateral halteres',3,'12–15',75,'isolador'],['ombro_lateral','Elevação lateral cabo',2,'12–15',75,'isolador'],
+['ombro_posterior','Crucifixo inverso máquina',3,'12–15',75,'isolador'],['ombro_posterior','Face pull',2,'12–15',75,'isolador'],
+['quadriceps','Agachamento livre',3,'6–10',150,'composto'],['quadriceps','Leg press 45°',3,'10–12',120,'composto'],['quadriceps','Cadeira extensora',2,'12–15',75,'isolador'],
+['posterior','Stiff com halteres',3,'8–12',120,'composto'],['posterior','Mesa flexora',3,'10–15',90,'isolador'],['posterior','Elevação pélvica',2,'8–12',120,'composto'],
+['panturrilha','Panturrilha em pé',3,'12–20',75,'isolador'],['panturrilha','Panturrilha sentado',2,'12–20',75,'isolador'],
+['abdomen','Abdominal na polia',3,'12–15',60,'isolador'],['abdomen','Prancha',3,'30–45 s',60,'isolador'],
+['aerobico','Caminhada inclinada',1,'15–25 min',0,'cardio'],['aerobico','Bicicleta ergométrica',1,'15–25 min',0,'cardio']
+];
+state.planSelected=Array.isArray(state.planSelected)?state.planSelected:['peito','triceps'];
+state.planMinutes=state.planMinutes||60;state.planStrategy=state.planStrategy||'padrao';state.planGoal=state.planGoal||'hipertrofia';state.generated=state.generated||null;
+function toggleMuscle(m){state.planSelected=state.planSelected.includes(m)?state.planSelected.filter(x=>x!==m):[...state.planSelected,m];save();render()}
+function lastExercise(name){for(const sess of state.sessions){if(Array.isArray(sess.exercises)&&sess.exercises.some(e=>e.name===name))return sess.date}return null}
+function lastMuscle(m){for(const sess of state.sessions){if(Array.isArray(sess.muscles)&&sess.muscles.includes(m))return sess.date}return null}
+function hoursSince(t){return t?Math.floor((Date.now()-t)/3600000):null}
+function generatePlan(){
+const selected=state.planSelected;if(!selected.length){alert('Selecione ao menos um grupo muscular.');return}
+const minutes=Number(state.planMinutes);const max=Math.max(2,Math.floor((minutes-8)/9));let per=Math.max(1,Math.min(3,Math.floor(max/selected.length)));let result=[];
+for(const m of selected){let options=BANK.filter(e=>e[0]===m).map(e=>({muscle:e[0],name:e[1],sets:e[2],reps:e[3],rest:e[4],kind:e[5],hours:hoursSince(lastExercise(e[1]))}));
+options.sort((a,b)=>{let p=x=>x.hours===null?1000:x.hours;return p(b)-p(a)});
+let pick=options.slice(0,per);if(state.planStrategy==='pre'){pick.sort((a,b)=>(a.kind==='isolador'?0:1)-(b.kind==='isolador'?0:1))}else{pick.sort((a,b)=>(a.kind==='composto'?0:1)-(b.kind==='composto'?0:1))}
+result.push(...pick)}
+if(selected.includes('aerobico'))result.sort((a,b)=>(a.muscle==='aerobico'?1:0)-(b.muscle==='aerobico'?1:0));
+state.generated={date:Date.now(),muscles:[...selected],goal:state.planGoal,strategy:state.planStrategy,exercises:result,minutes};state.tab='planner';save();render();
+}
+function renderPlanner(){
+let warnings=state.planSelected.map(m=>{let h=hoursSince(lastMuscle(m));return h!==null&&h<48?MUSCLES.find(x=>x[0]===m)[1]+' treinado há '+h+'h':''}).filter(Boolean);
+return '<div class="eyebrow">Treino Pro / Planejador inteligente</div><h1>Vai treinar o quê hoje?</h1><p>Escolha os grupos e gere uma sugestão adaptável ao seu histórico.</p><div class="card"><div class="musclegrid">'+MUSCLES.map(([id,name])=>'<button class="muscle '+(state.planSelected.includes(id)?'chosen':'')+'" onclick="toggleMuscle(&quot;'+id+'&quot;)">'+(state.planSelected.includes(id)?'✓ ':'○ ')+esc(name)+'</button>').join('')+'</div><label>Objetivo</label><select onchange="state.planGoal=this.value;save()"><option value="hipertrofia" '+(state.planGoal==='hipertrofia'?'selected':'')+'>Hipertrofia</option><option value="forca" '+(state.planGoal==='forca'?'selected':'')+'>Força</option><option value="leve" '+(state.planGoal==='leve'?'selected':'')+'>Treino leve</option></select><label>Tempo disponível</label><select onchange="state.planMinutes=Number(this.value);save()">'+[30,45,60,75,90].map(n=>'<option '+(state.planMinutes==n?'selected':'')+' value="'+n+'">'+n+' minutos</option>').join('')+'</select><label>Estratégia de ordem</label><select onchange="state.planStrategy=this.value;save()"><option value="padrao" '+(state.planStrategy==='padrao'?'selected':'')+'>Compostos primeiro</option><option value="pre" '+(state.planStrategy==='pre'?'selected':'')+'>Pré-exaustão (isoladores primeiro)</option></select>'+(warnings.length?'<p class="warn">⚠ Recuperação: '+esc(warnings.join('; '))+'. Avalie fadiga e recuperação antes de repetir.</p>':'')+'<button class="primary" onclick="generatePlan()">✦ Selecionar exercícios</button></div>'+(state.generated?renderGenerated():'<div class="card"><b>Como a seleção funciona</b><p>Prioriza movimentos não registrados recentemente, organiza compostos e isoladores e limita o número de exercícios ao tempo disponível. É uma regra inicial, não uma avaliação clínica.</p></div>')}
+function renderGenerated(){let p=state.generated;return '<div class="card"><div class="row"><h2>Treino sugerido</h2><span class="pill">'+p.minutes+' min disponíveis</span></div><p>Exercícios sugeridos: '+p.exercises.length+'. Revise a ordem e ajuste cargas conforme seu desempenho.</p>'+p.exercises.map((e,i)=>'<div class="historyitem"><div class="row"><b>'+(i+1)+'. '+esc(e.name)+'</b><button class="secondary" onclick="replaceGenerated('+i+')">Trocar</button></div><div class="muted">'+e.sets+' × '+esc(e.reps)+' · '+(e.rest?e.rest+'s descanso':'cardio')+'</div><div class="tiny">'+(e.hours===null?'Sem histórico desse exercício': 'Última execução registrada há '+e.hours+'h')+' · '+(e.kind==='composto'?'Movimento composto':e.kind==='isolador'?'Movimento isolador':'Aeróbico')+'</div></div>').join('')+'<button class="primary" onclick="beginGenerated()">Iniciar este treino</button></div>'}
+function replaceGenerated(i){let e=state.generated.exercises[i];let options=BANK.filter(x=>x[0]===e.muscle&&x[1]!==e.name);if(!options.length){alert('Não há alternativa cadastrada para este grupo.');return}let o=options[0];state.generated.exercises[i]={muscle:o[0],name:o[1],sets:o[2],reps:o[3],rest:o[4],kind:o[5],hours:hoursSince(lastExercise(o[1]))};save();render()}
+function beginGenerated(){state.activeGenerated=JSON.parse(JSON.stringify(state.generated));state.generatedLogs={};state.tab='generatedWorkout';save();render()}
+function renderGeneratedWorkout(){let p=state.activeGenerated;if(!p)return '<p>Gere um treino primeiro.</p>';return '<h1>Treino de hoje</h1><p>'+p.muscles.map(m=>MUSCLES.find(x=>x[0]===m)?.[1]||m).join(' · ')+'</p>'+p.exercises.map((e,i)=>'<section class="card"><div class="row"><b>'+(i+1)+'. '+esc(e.name)+'</b><button class="secondary" onclick="timer('+e.rest+')">⏱</button></div><div class="muted">'+e.sets+' × '+esc(e.reps)+'</div>'+Array.from({length:e.sets},(_,j)=>{let k=i+'-'+j,l=state.generatedLogs[k]||{};return '<div class="setrow"><span>'+(j+1)+'</span><input type="number" inputmode="decimal" placeholder="kg" value="'+esc(l.kg||'')+'" onchange="logGenerated(&quot;'+k+'&quot;,&quot;kg&quot;,this.value)"><input type="number" inputmode="numeric" placeholder="reps" value="'+esc(l.reps||'')+'" onchange="logGenerated(&quot;'+k+'&quot;,&quot;reps&quot;,this.value)"><button class="'+(l.done?'done':'')+'" onclick="logGenerated(&quot;'+k+'&quot;,&quot;done&quot;,'+(!l.done)+');render()">'+(l.done?'✓':'○')+'</button></div>'}).join('')+'</section>').join('')+'<button class="primary" onclick="finishGenerated()">Concluir e salvar treino</button>'}
+function logGenerated(k,field,value){state.generatedLogs[k]||={};state.generatedLogs[k][field]=value;save()}
+function finishGenerated(){let p=state.activeGenerated;let sets=0,volume=0;p.exercises.forEach((e,i)=>{for(let j=0;j<e.sets;j++){let l=state.generatedLogs[i+'-'+j]||{};if(l.done){sets++;volume+=(Number(l.kg)||0)*(Number(l.reps)||0)}}});if(!sets){alert('Marque pelo menos uma série concluída.');return}state.sessions.unshift({date:Date.now(),name:'Treino personalizado · '+p.muscles.map(m=>MUSCLES.find(x=>x[0]===m)?.[1]||m).join(' + '),sets,volume,muscles:p.muscles,exercises:p.exercises});state.sessions=state.sessions.slice(0,250);state.activeGenerated=null;state.generatedLogs={};state.tab='history';save();render()}
+const PERSONALITIES=[{name:'Renato Cariani',tag:'Referência brasileira',desc:'Biblioteca temática em preparação. Não atribuímos fichas sem fonte verificável.'},{name:'Dwayne Johnson',tag:'Treino de celebridade',desc:'Rotinas publicadas variam ao longo do tempo. Conteúdo documental pendente de verificação.'},{name:'Chris Bumstead',tag:'Classic Physique',desc:'Referência de bodybuilding. Fichas específicas dependem de fontes documentadas.'},{name:'Ramon Dino',tag:'Classic Physique',desc:'Referência de fisiculturismo brasileiro. Fichas específicas dependem de fontes documentadas.'}];
+const originalPros=renderPros;renderPros=function(){return originalPros()+'<h2>Outras personalidades</h2>'+PERSONALITIES.map(p=>'<div class="card"><b>'+esc(p.name)+'</b><div class="muted">'+esc(p.tag)+'</div><p>'+esc(p.desc)+'</p></div>').join('')};
+
+function render(){applySettings();let views={planner:renderPlanner,generatedWorkout:renderGeneratedWorkout,home:renderHome,workout:renderWorkout,history:renderHistory,pros:renderPros,settings:renderSettings};document.getElementById('app').innerHTML=(views[state.tab]||renderHome)();document.getElementById('bottom').innerHTML=[['planner','✦','Planejar'],['workout','▤','Treinos'],['history','▥','Evolução'],['pros','★','Biblioteca'],['settings','⚙','Ajustes']].map(x=>'<button class="'+(state.tab===x[0]?'active':'')+'" onclick="nav(&quot;'+x[0]+'&quot;)"><b>'+x[1]+'</b>'+x[2]+'</button>').join('')}
+try{render()}catch(e){document.getElementById('app').innerHTML='<div class="card"><h2>Erro de inicialização</h2><p>'+esc(e.message)+'</p></div>'}
+</script></body></html>
